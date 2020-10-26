@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>location.hash</title>
+</head>
+
+<body>
+</body>
+
+<!-- 1.）a.html：(www.a.com/a.html) -->
+<iframe id="iframe" src="http://www.b.com/b.html" style="display:none;"></iframe>
+<script>
+    var iframe = document.getElementById('iframe');
+
+    // 向b.html传hash值
+    setTimeout(function() {
+        iframe.src = iframe.src + '#user=admin';
+    }, 1000);
+    
+    // 开放给同域c.html的回调方法
+    function onCallback(res) {
+        alert('data from c.html ---> ' + res);
+    }
+</script>
+
+<!-- 2.）b.html：(www.b.com/b.html) -->
+<iframe id="iframe" src="http://www.a.com/c.html" style="display:none;"></iframe>
+<script>
+    var iframe = document.getElementById('iframe');
+
+    // 监听a.html传来的hash值，再传给c.html
+    window.onhashchange = function () {
+        iframe.src = iframe.src + location.hash;
+    };
+</script>
+
+<!-- 3.）c.html：(www.a.com/c.html) -->
+<script>
+    // 监听b.html传来的hash值
+    window.onhashchange = function () {
+        // 再通过操作同域a.html的js回调，将结果传回
+        window.parent.parent.onCallback('hello: ' + location.hash.replace('#user=', ''));
+    };
+</script>
+
+</html>

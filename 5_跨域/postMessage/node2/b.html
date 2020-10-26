@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+</body>
+</html>
+<script>
+'use strict'
+    window.onmessage = function (e) { 
+        //父窗口和子窗口都可以通过message事件，监听对方的消息。
+        console.log(e.data,'b.html');
+        //子窗口通过event.source属性引用父窗口，然后发送消息。event.origin属性可以过滤不是发给本窗口的消息。 
+        e.source.postMessage('从b向a发消息',e.origin);   
+    }  
+</script>
