@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>跨域</title>
+</head>
+<script type="module">
+    import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js'
+  </script>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<body>
+    <p>出现跨域是指：协议、端口、域名不同，不同的域名指向一个ip地址，也是跨域</p>
+</body>
+
+</html>
+
+<script>
+    function show(params){
+        console.log(params);  //  object
+    }
+</script>
+<script>
+'use strict'
+    // CORS是一个W3C标准，全称是"跨域资源共享"（Cross-origin resource sharing）
+    // 它允许浏览器向跨源服务器，发出XMLHttpRequest请求，
+    // 从而克服了AJAX只能同源使用的限制。 
+
+    // 优缺点：
+    //     目前，所有浏览器都支持该功能(IE8+：IE8/9需要使用XDomainRequest对象来支持CORS）)，CORS也已经成为主流的跨域解决方案。
+    //     整个CORS通信过程，都是浏览器自动完成，不需要用户参与。对于开发者来说，CORS通信与同源的AJAX通信没有差别，代码完全一样。浏览器一旦发现AJAX请求跨源，就会自动添加一些附加的头信息，有时还会多出一次附加的请求，但用户不会有感觉。
+    //     CORS与JSONP的使用目的相同，但是比JSONP更强大。JSONP只支持GET请求，CORS支持所有类型的HTTP请求。JSONP的优势在于支持老式浏览器，以及可以向不支持CORS的网站请求数据。
+
+    // 浏览器将CORS请求分成两类：简单请求（simple request）和非简单请求（not-so-simple request）
+    // 简单请求：简单请求，浏览器直接发出CORS请求。
+    //     具体来说，就是在头信息之中，增加一个Origin字段。
+    // 非简单请求：是那种对服务器有特殊要求的请求，比如请求方法是PUT或DELETE，或者Content-Type字段的类型是application/json。
+    // 非简单请求的CORS请求，会在正式通信之前，增加一次HTTP查询请求，称为"预检"请求（preflight）。
+
+    let xhr = new XMLHttpRequest;   
+    document.cookie = 'name=lee';  //cookie  不能跨域  
+    xhr.withCredentials = true;  //   
+    xhr.open('PUT','http://localhost:4000/getData',true);  
+    xhr.setRequestHeader('name', 'lee1');  
+    xhr.onreadystatechange = function () {   
+        if(xhr.readyState === 4){ 
+            if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
+                    console.log(xhr.response);  
+            }        
+        }            
+    } 
+    xhr.send();
+
+//  内存泄漏
+</script>

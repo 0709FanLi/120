@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>跨域</title>
+</head>
+<script type="module">
+    import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js'
+  </script>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<body>
+    <p>出现跨域是指：协议、端口、域名不同，不同的域名指向一个ip地址，也是跨域</p>
+</body>
+
+</html>
+
+<script>
+    function show(params){
+        console.log(params);  //  object
+    }
+</script>
+<script>
+'use strict'
+    //  解决跨域的方案
+    // 1、通过jsonp跨域。
+    // 通常我们用不同的标签，获取相应的静态资源，同理，我们可以动态的创建 <script> 
+    // 来调用接口
+    // 优缺点：JSONP是服务器与客户端跨源通信的常用方法，最大的特点就是简单适用，
+    //         老式浏览器全部支持，浏览器改造很小
+    //         只能实现get、不安全，容易xss攻击
+    function jsonp({url,params,cb}) { 
+        return new Promise((resolve, reject) => { 
+            let script = document.createElement('script');               
+            window[cb] = function (params) {     
+                    resolve(params); 
+            }      
+            params = {...params,cb};  
+            let arrs = [];  
+            for(let key in params){  
+                arrs.push(`${key}=${params[key]}`);       
+            }                
+            script.src = `${url}?${arrs.join('&')}`;   
+            document.body.appendChild(script);
+        });        
+    }; 
+    jsonp({  
+        url: 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su', 
+        params:{wd:'a'},    
+        cb:'show'       
+        })
+        .then(data=>{            
+            console.log('jsonp跨域请求的数据为：',data);   
+        }
+    );
+
+    // // 2.jquery ajax：
+
+    // $.ajax({
+    //     url: 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',
+    //     type: 'get',
+    //     dataType: 'jsonp',  // 请求方式为jsonp
+    //     jsonpCallback: "show",    // 自定义回调函数名
+    //     data: { wd:'a'}
+    // });
+
+    // 3.）vue.js：
+
+    // this.$http.jsonp('https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su', {
+    //     params: {wd:'a'},
+    // jsonp: 'show'}).then((res) => {
+    //     console.log(res); 
+    // })
+
+
+
+//  内存泄漏
+</script>
