@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    
+</body>
+</html>
+<script>
+'use strict'
+    function Father(){
+        this.name = 'li';
+        this.goto = function (){
+            console.log('goto');
+        }
+    }
+
+    let classF = new Father();
+    // console.log('classF', Father.prototype);
+    // console.log('of', Object.getPrototypeOf(classF));
+    console.log('classF', classF.__proto__ === Father.prototype);  //  true;
+    
+    // Father.prototype = {
+    //     constructor: 'Father函数本身',
+    //     _proto_: '指向 Object' 
+    // }
+    
+    // 原型和原型链
+
+    classF.constructor  
+
+</script>

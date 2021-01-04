@@ -1,0 +1,2 @@
+1.  es5 来说 let obj = new Function() 的作用是 把obj 的 __proto__ 链接到 构造函数Function.protype
+    es6 new Function() 的作用是  返回当前实例 语法如此                                     

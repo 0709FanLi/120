@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+
+<body>
+    1. es6 class 只是,es5构造函数模式的一个语法糖, es6 class  的constructor 就是es5的构造函数。
+    2. class 内部是严格模式。
+    4. 在constructor内部绑定this, 在函数外部使用,
+        constructor{
+            this.getName = this.getName.bind(this);
+        }
+        let { getName } = new Point();
+    5.  class 内的函数都是定义在 protype 上边，并且不可枚举，这点与es5相反，
+    6. get 和 set 函数 
+</body>
+</html>
+<script>
+'use strict'
+let a = 1;
+class Me{
+    constructor(){
+        this.a = a++;
+    }
+    set str(value){
+        // this.str = 'uuu';
+        console.log('setter',value); // lalala
+    }
+    get str(){
+        return this.a++;
+    }
+}
+let obj = new Me();
+obj.str = 'lalala';
+console.log(obj.str)    // 2
+console.log(obj.str)    // 3
+console.log(obj.str)    // 4
+</script>
