@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>get_set</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+
+</html>
+
+<script>
+    
+    let observer = function(data){
+        if(typeof data !== 'object'){
+            return;
+        }
+        Object.keys(data).map(key=>{
+            reactnativeFunc(data,key,data[key]);
+        })
+    }
+
+    function Dep(){
+        this.subs = [];
+    }
+
+    Dep.prototype.notify = function(){
+        this.subs.map(item => {
+            item.update();
+        })
+    }
+
+    function reactnativeFunc(data,key,value){
+        let dep = new Dep();
+        Object.defineProperty(data,key,{
+            get(){
+                if(Dep.target){
+                    dep.subs.push(Dep.target);
+                }
+                return value;
+            },
+            set(newVal){
+                if(newVal !== value){
+                    value = newVal;
+                    dep.notify();
+                }
+            }
+        })
+    }
+
+    Dep.target = null;
+
+    function MVue(options){
+        observer(options.data);
+        this.el = document.querySelector(options.el);
+        this.el.textContent = options.data.name;
+        this.data = options.data;
+        new Watcher(this, callback=(value)=>{
+            this.el.textContent = value;
+        })
+    };
+
+    function Watcher(vm, callback){
+        this.vm = vm;
+        this.value = this.get();
+        this.callback = callback;
+    }
+
+    Watcher.prototype = {
+        get:function(){
+            Dep.target = this;
+            const value = this.vm.data.name;
+            Dep.target = null;
+            return value;
+        },
+        update:function(){
+            const value = this.vm.data.name;
+            const oldVal = this.value;
+            if(value !== oldVal){
+                this.callback(value);
+            }
+        }
+    }
+
+    const vm = new MVue({
+        el:'#app',
+        data:{
+            name:'hello li!'
+        }
+    })
+
+</script>
