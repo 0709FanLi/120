@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Proxy</title>
+    </head>
+    <body>
+        <script>
+            // get 函数
+            const handler = {
+                get: function (obj, prop) {
+                    console.log('get')
+                    return prop in obj ? obj[prop] : '666'
+                },
+                set: function (obj, prop, val) {
+                    console.log(obj, prop, val) //  {}  "a"  1
+                }
+            }
+
+            const p = new Proxy({}, handler)
+            p.a = 1
+            console.log(p.b) // 666
+
+            /*********************************************************************/
+            //  无操作转发代理
+            let target = {}
+            let p2 = new Proxy(target, {})
+
+            p2.a = 37 //  操作转发目标
+
+            //  验证
+            let validator = {
+                set: function (obj, prop, value) {
+                    if (prop == 'age') {
+                        if (!Number.isInteger(value)) {
+                            throw new TypeError('年龄不是整数!')
+                        }
+                        if (value > 200) {
+                            throw new TypeError('年龄看起来是无效的!')
+                        }
+                        obj[prop] = value
+                        return true
+                    }
+                }
+            }
+
+            let persion = new Proxy({}, validator)
+            persion.age = 100
+            // persion.age = 11.2; //  Uncaught TypeError: 年龄不是整数!
+            // persion.age = 201   //  Proxy.html:40 Uncaught TypeError: 年龄看起来是无效的!
+
+            //  方法代理可以轻松的通过一个新构造函数来扩展一个已有的构造函数
+
+            function extend(sup, base) {
+                var descriptor = Object.getOwnPropertyDescriptor(base.prototype, 'constructor')
+                console.log('descriptor', base.prototype)
+                base.prototype = Object.create(sup.prototype)
+                var handler = {
+                    construct: function (target, args) {
+                        var obj = Object.create(base.prototype)
+                        this.apply(target, obj, args)
+                        return obj
+                    },
+                    apply: function (target, that, args) {
+                        sup.apply(that, args)
+                        base.apply(that, args)
+                    }
+                }
+                var proxy = new Proxy(base, handler)
+                descriptor.value = proxy
+                Object.defineProperty(base.prototype, 'constructor', descriptor)
+                return proxy
+            }
+
+            var Person = function (name) {
+                this.name = name
+            }
+
+            var Boy = extend(Person, function (name, age) {
+                this.age = age
+            })
+
+            Boy.prototype.sex = 'M'
+
+            var Peter = new Boy('Peter', 13)
+            console.log(Peter.sex) // "M"
+            console.log(Peter.name) // "Peter"
+            console.log(Peter.age) // 13
+        </script>
+    </body>
+</html>

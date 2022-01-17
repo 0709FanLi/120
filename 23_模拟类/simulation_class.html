@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>模拟类</title>
+    </head>
+    <body></body>
+</html>
+
+<script>
+    // 1. 工厂模式
+    // 可以创建一个包含必要信息的对象
+    function creatObject(name, age) {
+        let obj = new Object()
+        obj.name = name
+        obj.age = age
+        obj.getName = function () {
+            return this.name
+        }
+        obj.getName = function () {
+            return this.name
+        }
+        return obj
+    }
+    let myObj = creatObject('源', 18)
+    console.log(myObj.name, myObj.age)
+
+    //  2 构造函数的方法
+    //    new 的作用
+    /*
+    创建一个临时对象
+    返回 临时对象
+    对象添加 __proto__ 指向 构造函数
+    改变this指向 this 指向对象
+  */
+    function ObjFunc(name, age) {
+        this.name = name
+        this.age = age
+    }
+
+    ObjFunc.prototype = {
+        constructor: ObjFunc,
+        getName: function () {
+            return this.name
+        },
+        getAge: function () {
+            return this.age
+        }
+    }
+
+    let obj2 = new ObjFunc('李', 18)
+    console.log(typeof obj2) // obj
+</script>

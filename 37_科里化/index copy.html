@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>柯里化</title>
+    </head>
+    <body></body>
+</html>
+<script>
+    // add(1)(2)(3)(4) = 10
+    //  参数的长度一定
+    // let sum = (a,b,c,d)=>a+b+c+d;
+    // function curry(sum){
+    //     let len = sum.length;
+    //     let opts = [];
+    //     return function next(...arg){ // 收集参数
+    //         opts = opts.concat(arg);
+    //         if(opts.length < len){
+    //             return next;
+    //         } else {
+    //             return sum.apply(null,opts);
+    //         }
+    //     }
+    // };
+    // //  测试一下
+    // let func = curry(sum);
+    // console.log(func(1)(2)(3)(4));  // 10
+    // console.log(func(1,2)(3)(4));   // 10
+
+    // /*  参数的长度不定
+    // 第一种 add(1)(2)(3)(4)(5)(6)...(100886)()
+    // 以()为标志结束
+    // */
+
+    // // 来实现
+    // function curry2(fn) {
+    //     let opts =[];
+    //     return function next(...args) {
+    //         opts = opts.concat(args)
+    //         if(args.length){
+    //             return next
+    //         } else {
+    //             return fn.apply(null,opts);
+    //         }
+    //     }
+    // };
+    // let add2 = function () {
+    //     return [...arguments].reduce((prev,cur)=>prev+cur);
+    // };
+    // let func2 = curry2(add2);
+    // console.log(func2(1)(2)(3)(4)());   // 10
+    // console.log(func2(1)(2,3)(4)());    //10
+
+    // /*  参数的长度不定
+    // 第一种 add(1)(2)(3)(4)(5)(6)...(100886)
+    // 没有标志结束
+    // */
+
+    // // 没有结束标志 怎么判断执行时机
+    // // 先来看下  toString 函数
+
+    // function curry3(fn) {
+    //     let opts = [];
+    //     console.log('opts');
+    //     function next(...args) { //  next仅仅用来收集参数
+    //         opts = opts .concat(args);
+    //         return next
+    //     }
+    //     //  字符类型
+    //     next.valueOf = function () {
+    //         return fn.apply(null, opts);
+    //     }
+    //     // 数值类型
+    //     next.toString = function () {
+    //         return fn.apply(null, opts);
+    //     }
+    //     return next;
+    // };
+    // let add3 = function () {
+    //     return [...arguments].reduce((prev,cur)=>prev+cur);
+    // };
+    // let func3 = curry3(add3);
+    // console.log(func3(1)(2)(3)(4));   // 10
+    // console.log(func3(1)(2,3)(4));    //10
+    // let aa = func3(1)(2,3)(4);
+    // console.log(aa);
+
+    function setName(opt) {
+        function name(name) {
+            return name
+        }
+        name.toString = function () {
+            console.log('隐式调用') //  会不会打印出来？
+        }
+        return name
+    }
+    console.log(setName(123))
+    // let arr = [
+    //     {id: 1, name: '部门1', pid: 0},
+    //     {id: 2, name: '部门2', pid: 1},
+    //     {id: 3, name: '部门3', pid: 1},
+    //     {id: 4, name: '部门4', pid: 3},
+    //     {id: 5, name: '部门5', pid: 4},
+    // ];
+</script>

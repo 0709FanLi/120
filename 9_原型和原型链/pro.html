@@ -1,23 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>原型和原型链</title>
+    </head>
 
-<body>
-</body>
+    <body></body>
 </html>
 <script>
-'use strict'
-    function Foo(){
-        this.a = 111;
+    /*
+    原型和原型链：
+    原型：
+        prototye 构造函数独有的
+        constructor: 存在原型中
+        __proto__: 存在于实例中，指向构造函数的原型
+*/
+    /*
+    实例的__proto__指向构造函数的原型，原型的__proto__指向Object,Object的__proto__ 指向null，
+    __proto__将对象和原型链接起来，形成原型链
+*/
+
+    function Parent() {
+        this.name = '李四'
     }
-    let objA = new Foo();
-    // console.log('Foo',Foo.prototype);
-    // console.log('objA',objA.__proto__.constructor === Foo);  //  true
-    // console.log('objA',objA.constructor === Foo);   //  true
-    console.log('objA',objA);   //  true
+    let obj1 = new Parent()
+    console.log(obj1)
+    // console.log(obj1.constructor);
+    console.log(obj1.__proto__.__proto__.__proto__) //  null
+    //  当构造函数为Object的时候,__proto__为null
 </script>

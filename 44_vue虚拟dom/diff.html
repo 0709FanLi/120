@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue_diff算发</title>
+</head>
+<body>
+    <p>
+        1 数据发生变化怎么更新节点的
+            根据真实dom生成虚拟dom，当某个节点发生变化的时候生成Vnode,vnode和oldNode比较，
+            如果有不同会直接更新真实DOM,然后，oldNode 变为 Vnode
+        2 第一步查看是否值得比较,如果不值得比较直接替换oldNode
+        <ul>
+            <li>k值相同</li>
+            <li>标签名相同</li>
+            <li>是否同为注释节点</li>
+            //  是否都定义了data，data包含一些具体的信息，onclick style
+            <li>a.data ==== b.data</li>
+            <li>input</li>
+        </ul>
+        值得比较
+        <p>
+            如果Vnode === oldNode 直接return
+            如果文本节点不同，替换oldNode文本节点
+            如果old有子节点，vnode没有，删除oldNode子节点
+            如果old没有子节点，vnode有，生成真是子节点并添加
+            如果两者都有子节点，就执行updateChildren更新子节点
+        </p>
+    </p>
+</body>
+</html>

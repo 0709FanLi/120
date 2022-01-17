@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>半透明边框</title>
+    </head>
+    <style>
+        .box {
+            width: 200px;
+            height: 200px;
+            margin: 200px auto;
+            background: yellowgreen;
+            border: 10px solid hsla(290, 100%, 50%, 0.3);
+            /* 重要代码 */
+            background-clip: padding-box;
+        }
+    </style>
+    <body>
+        <div class="box"></div>
+    </body>
+</html>

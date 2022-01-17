@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>deep_copy</title>
+    </head>
+    <body></body>
+</html>
+<script>
+    // let map = new Map()
+    // let set  = new Set()
+    // set.add(456)
+    // set.add(123)
+    // map.set('111','222')
+    // map.set({a:1},[1,2,3])
+    // let obj = {
+    //     filed1: 'qwer',
+    //     filed2: 666,
+    //     filed3:{
+    //         child:'5566'
+    //     },
+    //     filed4:[1,2,3],
+    //     map,
+    //     set,
+    //     func:function(){console.log(22);}
+    // };
+    //  工具函数
+    function toRawType(type) {
+        return Object.prototype.toString.call(type).slice(8, -1).toLowerCase()
+    }
+    function isObject(type) {
+        return typeof type === 'object' && type != null
+    }
+    //  第一步
+    /*
+    function deepClone(target) {
+        // 1 递归遍历执行
+        let cloneTarget = {};
+        for(let key in target){
+            //  判断是否是对象 如果是对象就递归调用
+            if(isObject(target[key])){
+                cloneTarget[key] = deepClone(target[key])
+            } else {
+                cloneTarget[key] = target[key];
+            }
+        }
+        return cloneTarget;
+    }
+    const obj2 =deepClone(obj);
+    console.log(obj2);
+    */
+
+    /*
+    //  第二步 适配数组
+    function deepClone(target) {
+        //  判断是否为数组
+        let cloneTarget
+        toRawType(target) == 'array'?cloneTarget = []:cloneTarget = {};
+        for(let key in target){
+            if(isObject(target[key])){
+                cloneTarget[key] = deepClone(target[key])
+            } else {
+                cloneTarget[key] = target[key];
+            }
+        }
+        return cloneTarget;
+    }
+    const obj3 =deepClone(obj);
+    obj3.filed3.child = 888;
+    console.log(obj);
+    console.log(obj3);
+    */
+
+    /*
+    //  第三步 解决循环引用
+    function deepClone(target, map = new Map()) {
+        // 判断map里边是否有target
+        // 如果有target 直接返回target
+        if(map.has(target)) return map.get(target);
+        map.set(target, target)
+
+        let cloneTarget
+        toRawType(target) == 'array'?cloneTarget = []:cloneTarget = {};
+        for(let key in target){
+            if(isObject(target[key])){
+                cloneTarget[key] = deepClone(target[key], map)
+            } else {
+                cloneTarget[key] = target[key];
+            }
+        }
+        return cloneTarget;
+    }
+    obj.obj = obj;
+    const obj4 =deepClone(obj);
+    console.log(obj4);
+    */
+
+    // /*
+    //  添加map
+    //  可继续遍历的类型 object array map set arguments
+    //  不可遍历的类型   boolean date Undefined null number error function regxp symbol
+    //  typeof function(){} === 'function'
+    let cloneAble = ['array', 'object', 'map', 'set']
+    // function deepClone(target, map = new Map()) {
+    //     if(map.has(target)) return map.get(target);
+    //     map.set(target, target)
+
+    //     let cloneTarget
+    //     let type = toRawType(target);
+
+    //     if(cloneAble.includes(type)){
+    //         let Ctor = target.constructor;
+    //         cloneTarget =  new Ctor();
+    //     }
+    //     if(type === 'map'){
+    //         target.forEach((val,key)=>{
+    //             if(isObject(val)){
+    //                 cloneTarget.set(key, deepClone(val,map))
+    //             } else {
+    //                 cloneTarget.set(key,val);
+    //             }
+    //         })
+    //         return cloneTarget;
+    //     }
+    //     if(type === 'set'){
+    //         target.forEach((val,key)=>{
+    //             if(isObject(val)){
+    //                 cloneTarget.add(deepClone(val,map))
+    //             } else {
+    //                 cloneTarget.add(val);
+    //             }
+    //         })
+    //         return cloneTarget;
+    //     }
+
+    //     for(let key in target){
+    //         if(target.hasOwnProperty(key)){
+    //             if(isObject(target[key])){
+    //                 cloneTarget[key] = deepClone(target[key], map)
+    //             } else {
+    //                 cloneTarget[key] = target[key];
+    //             }
+    //         }
+    //     }
+    //     return cloneTarget;
+    // }
+    // let obj2 = deepClone(obj)
+    // console.log(obj);
+    // console.log(obj2);
+    // */
+
+    //  switch版本
+    let map = new Map()
+    map.set('aaa', 'mapmap')
+    map.set([5566], [778899, { ni: '好啊' }])
+    let set = new Set()
+    set.add(1)
+    set.add([66, 77, 88, { ni: '好啊set' }])
+    let objS = {
+        a: 1,
+        b: 'sss',
+        c: undefined,
+        d: null,
+        func: function () {
+            console.log(1)
+        },
+        obj: { aa: 1, bb: 2, cc: { ccc: 666, aaa: [888, 999] } },
+        arr: [1, 2, { rra: 11, rrb: 'sss' }],
+        map,
+        set
+    }
+    function deepCloneSwitch(target, mapi = new Map()) {
+        if (mapi.has(target)) return mapi.get(target)
+        mapi.set(target, target)
+
+        let cloneTarget
+        let type = toRawType(target)
+        //  可继续遍历类型
+        if (cloneAble.includes(type)) {
+            let Ctor = target.constructor
+            cloneTarget = new Ctor()
+        }
+
+        switch (type) {
+            case 'number':
+            case 'string':
+            case 'null':
+            case 'undefined':
+            case 'function':
+                cloneTarget = target
+                break
+            case 'object':
+                cloneTarget = circle(target, cloneTarget, mapi)
+                break
+            case 'array':
+                cloneTarget = circle(target, cloneTarget, mapi)
+                break
+            case 'set':
+                target.forEach((val, key) => {
+                    if (isObject(val)) {
+                        cloneTarget.add(deepCloneSwitch(val, map))
+                    } else {
+                        cloneTarget.add(val)
+                    }
+                })
+                break
+            case 'map':
+                target.forEach((val, key) => {
+                    if (isObject(val)) {
+                        cloneTarget.set(key, deepCloneSwitch(val, mapi))
+                    } else {
+                        cloneTarget.set(key, val)
+                    }
+                })
+                break
+            default:
+                break
+        }
+        return cloneTarget
+    }
+    function circle(target, cloneTarget, mapi) {
+        for (let key in target) {
+            if (target.hasOwnProperty(key)) {
+                if (isObject(target[key])) {
+                    cloneTarget[key] = deepCloneSwitch(target[key], mapi)
+                } else {
+                    cloneTarget[key] = target[key]
+                }
+            }
+        }
+        return cloneTarget
+    }
+    objS.objS = objS
+    let obj01 = deepCloneSwitch(objS)
+    console.log(objS)
+    console.log(obj01)
+</script>

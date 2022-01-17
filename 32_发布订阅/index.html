@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>发布订阅</title>
+    </head>
+    <body></body>
+</html>
+
+<script>
+    let subs = {}
+
+    function Events() {}
+    Events.prototype.on = function (key, func) {
+        if (typeof subs[key] !== 'function') {
+            subs[key] = func
+        }
+        // console.log('subs', subs)
+    }
+    Events.prototype.emit = function () {
+        let key = [].shift.call(arguments)
+        let arr = Array.prototype.slice.call(arguments)
+        // console.log('keykey',key);
+        console.log('arrarr', arr)
+        if (typeof subs[key] === 'function') {
+            subs[key].call(this, ...arr)
+        }
+    }
+
+    function name(name, age) {
+        console.log(`我的名字是${name},年龄是${age}`)
+    }
+
+    function peopleFunc(occupation, wages) {
+        console.log(`我的职业是${occupation},工资是${wages}`)
+    }
+    let watchEvents = new Events()
+
+    watchEvents.on('name', name)
+    watchEvents.on('peopleFunc', peopleFunc)
+
+    watchEvents.emit('peopleFunc', '搬砖', '3000')
+    watchEvents.emit('name', '张三', '18')
+</script>

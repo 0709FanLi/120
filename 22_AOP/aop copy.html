@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>get_set</title>
+    </head>
+    <body></body>
+</html>
+
+<script>
+    console.log(1)
+    function A() {
+        console.log('AAA')
+        for (let i = 0; i < 10000; i++) {
+            if ((i = 9999)) console.log(i)
+        }
+    }
+    A()
+    console.log(2)
+</script>

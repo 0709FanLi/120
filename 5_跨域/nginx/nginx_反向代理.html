@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Document</title>
+    </head>
 
-<body>
-</body>
+    <body></body>
 </html>
 <script>
-'use strict'
-/*  跨域原理： 同源策略是浏览器的安全策略，不是HTTP协议的一部分。
+    'use strict'
+    /*  跨域原理： 同源策略是浏览器的安全策略，不是HTTP协议的一部分。
     服务器端调用HTTP接口只是使用HTTP协议，不会执行JS脚本，不需要同源策略，也就不存在跨越问题。
     实现思路：通过nginx配置一个代理服务器（域名与domain1相同，端口不同）做跳板机，
     反向代理访问domain2接口，并且可以顺便修改cookie中domain信息，方便当前域cookie写入，实现跨域登录。   */
@@ -35,33 +34,32 @@
     } */
 
     // 1.) 前端代码示例：
-    var xhr = new XMLHttpRequest();
+    var xhr = new XMLHttpRequest()
 
     // 前端开关：浏览器是否读写cookie
-    xhr.withCredentials = true;
+    xhr.withCredentials = true
 
     // 访问nginx中的代理服务器
-    xhr.open('get', 'http://www.domain1.com:81/?user=admin', true);
-    xhr.send();
+    xhr.open('get', 'http://www.domain1.com:81/?user=admin', true)
+    xhr.send()
 
     // 2.) Nodejs后台示例：
-    var http = require('http');
-    var server = http.createServer();
-    var qs = require('querystring');
+    var http = require('http')
+    var server = http.createServer()
+    var qs = require('querystring')
 
-    server.on('request', function(req, res) {
-        var params = qs.parse(req.url.substring(2));
+    server.on('request', function (req, res) {
+        var params = qs.parse(req.url.substring(2))
 
         // 向前台写cookie
         res.writeHead(200, {
-            'Set-Cookie': 'l=a123456;Path=/;Domain=www.domain2.com;HttpOnly'   // HttpOnly:脚本无法读取
-        });
+            'Set-Cookie': 'l=a123456;Path=/;Domain=www.domain2.com;HttpOnly' // HttpOnly:脚本无法读取
+        })
 
-        res.write(JSON.stringify(params));
-        res.end();
-    });
+        res.write(JSON.stringify(params))
+        res.end()
+    })
 
-    server.listen('8080');
-    console.log('Server is running at port 8080...');
-
+    server.listen('8080')
+    console.log('Server is running at port 8080...')
 </script>

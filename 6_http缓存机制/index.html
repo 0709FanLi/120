@@ -1,76 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>http缓存机制</title>
-</head>
-<body>
-    <h2>强制缓存和对比缓存</h2>
-    <h3>强制缓存</h3>
-    <p>
-        1.  expires http1.0 的规范；它是一个绝对的时间，即下次请求时没有超过这个时间<br/>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>http缓存机制</title>
+    </head>
+    <body>
+        <h2>强制缓存和对比缓存</h2>
+        <h3>强制缓存</h3>
+        <p>
+            1. expires http1.0 的规范；它是一个绝对的时间，即下次请求时没有超过这个时间<br />
             直接返回缓存的信息，状态码304
-    </p>
-    <p>
-        2.  Cache-Control 最重要的规则，常见的取值：private public no-cache max-age no-store 默认为private
-    </p>
-    <p>
-        private:  客户端可以缓存；
-    </p>
-    <p>
-        public:  客户端和代理服务器都可缓存（前端的同学，可以认为public和private是一样的）
-    </p>
-    <p>
-        max-age=xxx:  缓存的内容将在 xxx 秒后失效
-    </p>
-    <p>
-        no-cache:  需要使用对比缓存来验证缓存数据（后面介绍）
-    </p>
-    <p>
-        no-store:  所有内容都不会缓存，强制缓存，对比缓存都不会触发（对于前端开发来说，缓存越多越好，so...基本上和它说886）    
-    </p>
-    <h3>对比缓存</h3>
-    <p>顾名思义，需要进行比较判断是否可以使用缓存。</p>
-    <h4>Last-Modified / If-Modified-Since</h4>
-    <p>Last-Modified:   服务器在响应请求时，告诉浏览器资源的最后修改时间</p>
-    <img src="https://images2015.cnblogs.com/blog/632130/201702/632130-20170210142249541-789089587.png" alt="图片">
-    <p>If-Modified-Since</p>
-    <p>
-        再次请求服务器时，通过此字段通知服务器上次请求时，服务器返回的资源最后修改时间。<br />
-        服务器收到请求后发现有头If-Modified-Since 则与被请求资源的最后修改时间进行比对。<br />
-        若资源的最后修改时间大于If-Modified-Since，说明资源又被改动过，则响应整片资源内容，返回状态码200；<br />
-        若资源的最后修改时间小于或等于If-Modified-Since，说明资源无新修改，则响应HTTP 304，告知浏览器继续使用所保存的cache。<br />
-    </p>
-    <img src="https://images2015.cnblogs.com/blog/632130/201702/632130-20170210142307166-135607673.png" alt="图片">
+        </p>
+        <p>
+            2. Cache-Control 最重要的规则，常见的取值：private public no-cache max-age no-store
+            默认为private
+        </p>
+        <p>private: 客户端可以缓存；</p>
+        <p>public: 客户端和代理服务器都可缓存（前端的同学，可以认为public和private是一样的）</p>
+        <p>max-age=xxx: 缓存的内容将在 xxx 秒后失效</p>
+        <p>no-cache: 需要使用对比缓存来验证缓存数据（后面介绍）</p>
+        <p>
+            no-store:
+            所有内容都不会缓存，强制缓存，对比缓存都不会触发（对于前端开发来说，缓存越多越好，so...基本上和它说886）
+        </p>
+        <h3>对比缓存</h3>
+        <p>顾名思义，需要进行比较判断是否可以使用缓存。</p>
+        <h4>Last-Modified / If-Modified-Since</h4>
+        <p>Last-Modified: 服务器在响应请求时，告诉浏览器资源的最后修改时间</p>
+        <img
+            src="https://images2015.cnblogs.com/blog/632130/201702/632130-20170210142249541-789089587.png"
+            alt="图片"
+        />
+        <p>If-Modified-Since</p>
+        <p>
+            再次请求服务器时，通过此字段通知服务器上次请求时，服务器返回的资源最后修改时间。<br />
+            服务器收到请求后发现有头If-Modified-Since 则与被请求资源的最后修改时间进行比对。<br />
+            若资源的最后修改时间大于If-Modified-Since，说明资源又被改动过，则响应整片资源内容，返回状态码200；<br />
+            若资源的最后修改时间小于或等于If-Modified-Since，说明资源无新修改，则响应HTTP
+            304，告知浏览器继续使用所保存的cache。<br />
+        </p>
+        <img
+            src="https://images2015.cnblogs.com/blog/632130/201702/632130-20170210142307166-135607673.png"
+            alt="图片"
+        />
 
-    <h4>Etag / If-None-Match</h4>
-    <p>Etag</p>
-    <p>
-        服务器响应请求时，告诉浏览器当前资源在服务器的唯一标识（生成规则由服务器决定）。
-    </p>
-    <img src="https://images2015.cnblogs.com/blog/632130/201702/632130-20170210142054182-1766818273.png" alt="图片">
-    <p>If-None-Match</p>
-    <p>
-        再次请求服务器时，通过此字段通知服务器客户段缓存数据的唯一标识。<br />
-        服务器收到请求后发现有头If-None-Match 则与被请求资源的唯一标识进行比对，<br />
-        不同，说明资源又被改动过，则响应整片资源内容，返回状态码200；<br />
-        相同，说明资源无新修改，则响应HTTP 304，告知浏览器继续使用所保存的cache。<br />
-    </p>
-    <img src="https://images2015.cnblogs.com/blog/632130/201702/632130-20170210142115479-1921175758.png" alt="图片">
-    <h1>总结</h1>
-    <img src="https://images2015.cnblogs.com/blog/632130/201702/632130-20170210142134291-1976923079.png" alt="图片">
-    <img src="https://images2015.cnblogs.com/blog/632130/201702/632130-20170210141453338-1263276228.png" alt="图片">
-</body>
+        <h4>Etag / If-None-Match</h4>
+        <p>Etag</p>
+        <p>服务器响应请求时，告诉浏览器当前资源在服务器的唯一标识（生成规则由服务器决定）。</p>
+        <img
+            src="https://images2015.cnblogs.com/blog/632130/201702/632130-20170210142054182-1766818273.png"
+            alt="图片"
+        />
+        <p>If-None-Match</p>
+        <p>
+            再次请求服务器时，通过此字段通知服务器客户段缓存数据的唯一标识。<br />
+            服务器收到请求后发现有头If-None-Match 则与被请求资源的唯一标识进行比对，<br />
+            不同，说明资源又被改动过，则响应整片资源内容，返回状态码200；<br />
+            相同，说明资源无新修改，则响应HTTP 304，告知浏览器继续使用所保存的cache。<br />
+        </p>
+        <img
+            src="https://images2015.cnblogs.com/blog/632130/201702/632130-20170210142115479-1921175758.png"
+            alt="图片"
+        />
+        <h1>总结</h1>
+        <img
+            src="https://images2015.cnblogs.com/blog/632130/201702/632130-20170210142134291-1976923079.png"
+            alt="图片"
+        />
+        <img
+            src="https://images2015.cnblogs.com/blog/632130/201702/632130-20170210141453338-1263276228.png"
+            alt="图片"
+        />
+    </body>
 </html>
 <style>
-    body{
+    body {
         padding-left: 200px;
     }
 </style>
 <script>
-'use strict'
-
-
+    'use strict'
 </script>

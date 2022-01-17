@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>内存泄漏</title>
+    </head>
+    <body></body>
+</html>
+<script>
+    // 内存泄露
+    // 1 使用不当的闭包
+    // function func1(params) {
+    //     let arr1 = new  Array(100).fill('张三');
+    //     return function func2() {
+
+    //     }
+    // };
+    // function func2(params) {
+    //     let arr1 = new  Array(100).fill('张三');
+    //     return function func2() {
+    //         let name = arr1;
+    //     }
+    // };
+
+    // function func3(params) {
+    //     test = new  Array(100).fill('张三');
+    //     this.test2 = new  Array(100).fill('张三');
+    // };
+    // func3();
+
+    // setInterval(() => {
+    //     this.$axios().then();
+    // }, 1000);
+
+    // console.log(window);
+
+    //  obj 对 {a :1} 是强引用
+    let obj = { a: 1 }
+
+    //  map 对 obj 是强引用
+    let map = new WeakMap()
+    map.set(obj, 1)
+
+    //  set 对 obj 是强引用
+    let set = new WeakSet()
+    set.add(obj)
+
+    obj = null
+    console.log(map.size)
+    console.log(set.size)
+</script>

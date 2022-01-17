@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>upload</title>
+    </head>
+    <body></body>
+</html>
+<script>
+    function* genertor() {
+        console.log(yield 1)
+        console.log(yield 2)
+        console.log(yield 3)
+        console.log(yield 4)
+    }
+    let gen = genertor()
+    gen.next()
+    gen.next(222)
+    gen.next(333)
+    gen.next(444)
+</script>

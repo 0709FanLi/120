@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>虚拟dom</title>
+    </head>
+    <body>
+        <ul>
+            <li>
+                1. 虚拟dom是什么？
+                <p>虚拟dom是javascript对象描述的DOM树。</p>
+            </li>
+            <li>
+                2. 虚拟dom的优点？
+                <p>
+                    1) 可以渲染到其它backend，比如react-native。 2)
+                    在不手动优化的前提下，依旧可以提供过得去的性能。 3) 函数式UI编程打开了大门
+                </p>
+            </li>
+            <li>
+                3. 怎样创建虚拟dom？ vue是通过将模板编译为 AST语法树->转化成render函数->返回 虚拟dom
+                { type:'ul', props:{class:'box'}, children:[ { type:'li', props：{class:'li'}, }, {
+                type:'li', props：{class:'li'}, }, } 这样的虚拟dom树
+            </li>
+        </ul>
+    </body>
+</html>
+<script></script>

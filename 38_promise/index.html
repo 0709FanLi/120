@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>promise</title>
+    </head>
+    <body>
+        789
+    </body>
+</html>
+<script>
+    function myPromise(exector) {
+        let self = this
+        self.status = 'pending'
+        self.reason = ''
+        self.value = ''
+        self.resolveCallBacks = []
+        self.rejectCallBacks = []
+
+        function resolve(value) {
+            if (self.status == 'pending') {
+                self.value = value
+                self.status = 'resolved'
+                self.resolveCallBacks.map((fn) => fn())
+            }
+        }
+
+        function reject(reason) {
+            if (self.status == 'pending') {
+                self.status = 'rejected'
+                self.reason = reason
+                self.rejectCallBacks.map((fn) => fn())
+            }
+        }
+
+        try {
+            exector(resolve, reject)
+        } catch (error) {
+            reject(error)
+        }
+    }
+
+    function resolvePromise(promise2, x, resolve, reject) {
+        if (promise2 === x) {
+            return reject(new TypeError('Chaining cycle detected for promise'))
+        }
+
+        let called
+        if (x !== null && (typeof x === 'object' || typeof x === 'function')) {
+            try {
+                let then = x.then
+
+                if (typeof then === 'function') {
+                    then.call(
+                        x,
+                        (y) => {
+                            if (called) return
+                            called = true
+
+                            //  promise2 resolve reject 三个参数一直都是不变的
+                            //  迭代出最后一个promise
+                            resolvePromise(promise2, y, resolve, reject)
+                        },
+                        (err) => {
+                            if (called) return
+                            called = true
+                            reject(err)
+                        }
+                    )
+                } else {
+                    resolve(x)
+                }
+            } catch (e) {
+                if (called) return
+                called = true
+                reject(e)
+            }
+        } else {
+            //  当then 注册的函数返回的不是promise的时候 就决议 promise
+            //  最后一个promise
+            resolve(x)
+        }
+    }
+
+    myPromise.prototype.then = function (onResolve, onRejected) {
+        let self = this
+        onResolve = typeof onResolve === 'function' ? onResolve : (val) => val
+        onRejected =
+            typeof onRejected === 'function'
+                ? onRejected
+                : (err) => {
+                      throw err
+                  }
+        let promise2 = new Promise((resolve, reject) => {
+            if (self.status === 'resolved') {
+                setTimeout(() => {
+                    try {
+                        let x = onResolve(self.value)
+                        resolvePromise(promise2, x, resolve, reject)
+                    } catch (e) {
+                        reject(e)
+                    }
+                }, 0)
+            }
+            if (self.status === 'rejected') {
+                setTimeout(() => {
+                    try {
+                        let x = onRejected(self.reason)
+                        resolvePromise(promise2, x, resolve, reject)
+                    } catch (e) {
+                        reject(e)
+                    }
+                }, 0)
+            }
+            if (self.status === 'pending') {
+                self.resolveCallBacks.push(() => {
+                    setTimeout(() => {
+                        try {
+                            let x = onResolve(self.value)
+                            resolvePromise(promise2, x, resolve, reject)
+                        } catch (e) {
+                            reject(e)
+                        }
+                    }, 0)
+                })
+                self.rejectCallBacks.push(() => {
+                    setTimeout(() => {
+                        try {
+                            let x = onRejected(self.reason)
+                            resolvePromise(promise2, x, resolve, reject)
+                        } catch (e) {
+                            reject(e)
+                        }
+                    }, 0)
+                })
+                console.log(self.rejectCallBacks.length)
+            }
+        })
+        return promise2
+    }
+
+    let obj = new myPromise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(555)
+        }, 2000)
+    })
+
+    obj.then(
+        (data) => {
+            console.log(data)
+            return new myPromise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve(666)
+                }, 2000)
+            })
+        },
+        (err) => err
+    ).then(
+        (data) => {
+            console.log(data)
+        },
+        (err) => err
+    )
+</script>

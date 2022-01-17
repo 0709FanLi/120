@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>收集检测</title>
+    </head>
+    <body></body>
+</html>
+<script>
+    //  判断是否是new 调用 采用 instanceof
+    function CheckNew() {
+        console.log(this)
+        // console.log(this instanceof CheckNew); // false
+        console.log(this instanceof CheckNew) // true
+    }
+    // CheckNew();
+    let obj1 = new CheckNew()
+</script>

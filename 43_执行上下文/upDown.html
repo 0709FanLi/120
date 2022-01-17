@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>执行上下文</title>
+</head>
+<body style="padding: 20px 50px;">
+    <h4>什么是执行上下文？</h4>
+    <p>
+        当执行函数的时候所作的环境准备，比如：作用域链 this的确定，就叫做执行上下文；执行上下文是一个抽象概念，可以理解为
+        <ul>
+            <li>1.变量对象</li>
+            <li>2.活动对象</li>
+            <li>3.作用域链</li>
+            <li>4.调用者信息</li>
+        </ul>
+    </p>
+    <p>
+        ES3:创建阶段：用当前函数的参数列表初始化一个变量对象，并将当前上下文与之相关联，<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;函数代码生命的函数和变量作为属性添加到对象上边，<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;在这一阶段会统一声明为undefined,等到赋值才会有确认的值，像不像是变量提升？<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;作用域链规定了如何查找变量，查找变量时会先从当前上下文变量对象中查找，<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;如果没有就会从父级上下文中查找，如果没有会继续向上查找，一直知道全局上下文的变量对象中，<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;这就形成了作用域链<br>
+            this的确定<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;obj.Func();<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;Func();<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;let c = new Func();<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;1. 对象调用就指向对象<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;2. 直接调用函数，没有 .调用，this一定指向window,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;3. this永远指向c<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;只有这三种情况<br>
+            执行阶段：在执行阶段中，JS引擎开始一行一行执行代码，在这个阶段变量开始赋值，沿作用域链查找变量，<br>
+            如果内部有函数调用就创建一个新的上下文并交出控制权。<br>
+    </p>
+    <p>
+        全局执行上下文->创建词法环境->创建对象环境记录器->创建外部环境引用<br>
+                        创建变量环境 创建对象环境记录器 创建外部环境引用<br>
+        函数执行上下文 创建此法环境 创建声明式环境记录器 创建外部环境引用<br>
+                        创建变量环境 创建声明式环境记录器 创建外部环境引用<br>
+    </p>
+    <p>
+        <B>创建词法环境->环境记录器->外部环境引用，let const</B><br>
+        <B>创建变量环境->环境记录器->外部环境引用，var</B><br>
+    </p>
+    <p>
+        let const 为什么不能重复定义？var可以<br>
+        var定义的时候 会检查词法环境有没有重复定义<br>
+        let const定义的时候会分别检查 词法环境和变量环境有没有定义的<br>
+    </p>
+    <p>
+        let const 存在暂时性死区？暂时性死区是什么？<br>
+        存在。<br>
+        所谓暂时性死区，就是在词法环境中已经被声明式环境记录器记录，<br>
+        但是并没有被赋值，所以不能访问。<br>
+    </p>
+</body>
+</html>
+<script>
+    
+</script>

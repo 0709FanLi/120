@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>get_set</title>
-</head>
-<body>
-    <p>get_set</p>
-</body>
-
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>get_set</title>
+    </head>
+    <body>
+        <p>get_set</p>
+    </body>
 </html>
 
 <script>
@@ -17,27 +16,27 @@
         name: 'tom',
         age: 18
     }
-    console.log('people.name', people.name);
-    console.log('people.name', people.age);
+    console.log('people.name', people.name)
+    console.log('people.name', people.age)
 
-    let animal = {};
-    let age;
-    let i = 1;
+    let animal = {}
+    let age
+    let i = 1
     Object.defineProperty(animal, 'age', {
-        get: function(){
-            console.log('获取年龄');
-            return age;
+        get: function () {
+            console.log('获取年龄')
+            return age
         },
-        set: function(newVal){
-            console.log('设置年龄');
-            i++;
-            age = newVal + i;
+        set: function (newVal) {
+            console.log('设置年龄')
+            i++
+            age = newVal + i
         }
     })
-    animal.age = '1months';
-    animal.age = '2months';
-    animal.age = '3months';
-    animal.age = '4months';
-    animal.age = '5months';
-    console.log(animal.age);    // 5months6
+    animal.age = '1months'
+    animal.age = '2months'
+    animal.age = '3months'
+    animal.age = '4months'
+    animal.age = '5months'
+    console.log(animal.age) // 5months6
 </script>

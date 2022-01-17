@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>防抖和节流</title>
+    </head>
+    <body>
+        <div class="box"></div>
+    </body>
+</html>
+
+<script>
+    function debounce(fn, wait, immediate) {
+        let timer
+        return function () {
+            let context = this
+            if (timer) clearTimeout(timer)
+            if (immediate) {
+                //  合并请求版 每隔一段时间 timer = null;
+                //  就会请求一次
+                let callNow = !timer
+                timer = setTimeout(() => {
+                    timer = null
+                }, wait)
+                if (callNow) fn.apply(context, [...arguments])
+            } else {
+                //  非立即执行版
+                timer = setTimeout(() => {
+                    fn.apply(context, [...arguments])
+                }, wait)
+            }
+        }
+    }
+
+    function throttle(fn, wait) {
+        // 时间戳版本
+        let time = Date.now()
+        return function () {
+            let context = this
+            let callTime = Date.now()
+
+            if (callTime - time >= wait) {
+                fn.call(context, [...arguments])
+                time = Date.now()
+            }
+        }
+    }
+
+    let el = document.getElementsByClassName('box')[0]
+
+    // el.addEventListener("mousemove", debounce(function(e){
+    //     console.log(666);
+    // }, 1000,true))
+
+    el.addEventListener(
+        'mousemove',
+        throttle(function (e) {
+            console.log('---------------------------------')
+        }, 1500)
+    )
+</script>
+<style>
+    .box {
+        width: 200px;
+        height: 100px;
+        background-color: antiquewhite;
+        margin: 150px auto;
+    }
+</style>

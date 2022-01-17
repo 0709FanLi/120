@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>1_高频</title>
+    </head>
+    <body></body>
+</html>
+<script>
+    let arr = [1, 2, [3, 4, [5, 6, [7, 8, [9, 10]]]]]
+    //  1 flat
+    // let newArr1 = arr.flat(Infinity);
+
+    //  2  正则
+    // let newArr2 = JSON.parse('['+JSON.stringify(arr).replace(/\[|\]/g,'').split(',')+']');
+    // console.log(newArr2);
+
+    //  3  函数递归 so beautiful
+    /*
+    let newArr = [];
+    function reSingalArr(arr){
+        arr.forEach(item=>{
+            if(Array.isArray(item)){
+                reSingalArr(item);
+            } else {
+                newArr.push(item);
+            }
+        })
+    }
+    reSingalArr(arr);
+    console.log('newArr',newArr);
+    */
+
+    //  reduce
+    function arrFunc(array = []) {
+        return array.reduce((sum, cur) => {
+            return sum.concat(Array.isArray(cur) ? arrFunc(cur) : cur)
+        }, [])
+    }
+    console.log(arrFunc(arr))
+</script>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>双向绑定</title>
+    </head>
+    <body>
+        <div id="app">
+            <!-- <input class="form-control" v-model="age" type="text"> -->
+            <input class="form-control" v-model="serve.status" type="text" />
+            <h1>{{age}}</h1>
+        </div>
+    </body>
+</html>
+
+<script>
+    function Watcher(vm, prop, callback) {
+        this.vm = vm
+        this.prop = prop
+        this.value = this.get()
+        this.callback = callback
+    }
+
+    function Dep() {
+        this.subs = []
+    }
+
+    Dep.prototype.notify = function () {
+        if (this.subs.length) {
+            this.subs.map((item) => item.update())
+        }
+    }
+
+    Watcher.prototype = {
+        get: function () {
+            Dep.target = this
+            this.value = this.vm.$data[this.prop]
+            Dep.target = null
+            return this.value
+        },
+        update: function () {
+            console.log('启动更新')
+            const value = this.vm.$data[this.prop]
+            const oldVal = this.value
+            if (value != oldVal) {
+                this.value = value
+                this.callback(value)
+            }
+        }
+    }
+
+    Mvue.prototype.init = function () {
+        observe(this, this.$data)
+        new Complie(this)
+    }
+
+    function Mvue(options, prop) {
+        this.$data = options.data
+        this.$el = document.querySelector(options.el)
+        this.$prop = prop
+        this.init()
+    }
+
+    function observe(self, data) {
+        if (!data && typeof data != 'object') {
+            return
+        }
+        let arr = Object.keys(data)
+        arr.map((item, key) => {
+            deNative(self, data, item, data[item])
+        })
+    }
+
+    function deNative(self, data, key, value) {
+        if (typeof value == 'object') {
+            observe(value)
+            return
+        }
+        let dep = new Dep()
+        console.log(666, data)
+        self.$data = new Proxy(data, {
+            get: function (obj, prop) {
+                console.log('prop', prop)
+                if (Dep.target) {
+                    dep.subs.push(Dep.target)
+                }
+                return obj[prop]
+            },
+            set: function (obj, prop, value) {
+                console.log('set', obj, prop, value)
+                if (obj[prop] != value) {
+                    obj[prop] = value
+                    //  通知更新
+                    console.log('通知更新')
+                    dep.notify()
+                }
+            }
+        })
+        console.log(777, data)
+    }
+
+    Dep.target = null
+</script>
+<script src="./complie.js"></script>
+<script>
+    var vue = new Mvue(
+        {
+            data: {
+                age: 18,
+                serve: {
+                    status: 1
+                }
+            },
+            el: '#app'
+        },
+        'age'
+    )
+</script>

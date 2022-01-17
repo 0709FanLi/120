@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Document</title>
+    </head>
 
-<body>
-</body>
+    <body></body>
 </html>
-<iframe src="http://localhost:4002/b.html"     frameborder="0" id="frame" onload="load()"    ></iframe>
-<script>       
-function load(params) {
-    let frame = document.getElementById('frame');
-    frame.contentWindow.postMessage('从a页面向b页面','http://localhost:4002'); 
-    window.onmessage = function (e) { 
-        //父窗口和子窗口都可以通过message事件，监听对方的消息。
-        console.log(e.data, 'a.html');  
-    }                   
-}
-</script>    
+<iframe src="http://localhost:4002/b.html" frameborder="0" id="frame" onload="load()"></iframe>
+<script>
+    function load(params) {
+        let frame = document.getElementById('frame')
+        frame.contentWindow.postMessage('从a页面向b页面', 'http://localhost:4002')
+        window.onmessage = function (e) {
+            //父窗口和子窗口都可以通过message事件，监听对方的消息。
+            console.log(e.data, 'a.html')
+        }
+    }
+</script>

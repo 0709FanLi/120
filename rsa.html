@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>使用jsencrypt执行OpenSSL的RSA加密，解密</title>
+    </head>
+    <!--引入jsencrypt.js-->
+    <script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.js"></script>
+    <script type="text/javascript">
+        //公钥
+        var PUBLIC_KEY =
+            'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCjT5iDuk+F6+n9m4t5Vgzs8EudNA5UQ8NLo7cZBTsyFnmgH8jHDsBUJbNhV9kXvTtyZLH3An50o1TF9LMGuRT00eWccBWUoW93CTrOlspnwhj7VBDx71IzFp/OvHX/ra/po7mav+teuecnoCrauBgTgrlQZODcoL+k3sPDJFZ7FwIDAQAB'
+        //私钥
+        var PRIVATE_KEY =
+            'MIICXQIBAAKBgQCjT5iDuk+F6+n9m4t5Vgzs8EudNA5UQ8NLo7cZBTsyFnmgH8jHDsBUJbNhV9kXvTtyZLH3An50o1TF9LMGuRT00eWccBWUoW93CTrOlspnwhj7VBDx71IzFp/OvHX/ra/po7mav+teuecnoCrauBgTgrlQZODcoL+k3sPDJFZ7FwIDAQABAoGBAIcv/ZWV5fx7ZPBuEU/4/qwo4r8Yd4AjtAfqV0hb/zugRUBa705wlJ9TsiEzol83Y313g6ZxJxMQnb1cqdI35fLMtFaqHje4pIb9S2Eg+4Pf0/I4xgDOtarUZOYmx4W9aoS9AqBcNSRBLfAQtZjQyXzrjsiTsXxg5/3USBel4MdRAkEA2J7ik3WbNiVNW4n8X/WrBHsVYhEm0BtEtOx7dInkOa4TQAJ1CFIXgRnPCq+AwpuNy3x/HQmQgaT8bszIirrdiQJBAMD/xuqmVgRUMSdmsjWjiidJL5tyHjKolfhDxl1e7XHwajaMzIvyiXe7MkOfH0iRqy7ReTOsKsgB4q4otL4yC58CQG4QVMld4S4ix+px8vSC65EMRPIeCt2EbWWMHrI4+ehAxXEpjnNa2qxzA5rHT6IRzXsN17xWRsFIpiZaEK9EgRkCQDaiMTULkR34l1GICLqWaO1mEkv2qgW9I3b7+JNF5AF1BRwcD2suZSu3mir6SGjKk6LVOXIfMp0bq4eRjlio4hECQQCgnedLlTsJ6dzWg88vhXsPGCLWZVhyRBe/XJLQFtpADTDW4Ir3Lxjszw/J9eORkX+x3E0ONFyFn8ysCTin/G77'
+        //使用公钥加密
+        var encrypt = new JSEncrypt()
+        //encrypt.setPrivateKey('-----BEGIN RSA PRIVATE KEY-----'+PRIVATE_KEY+'-----END RSA PRIVATE KEY-----');
+        encrypt.setPublicKey('-----BEGIN PUBLIC KEY-----' + PUBLIC_KEY + '-----END PUBLIC KEY-----')
+        var str = {
+            uid: '1223334',
+            pwd: 'asd'
+        }
+        var encrypted = encrypt.encrypt(JSON.stringify(str))
+        console.log('加密前数据:%o', str)
+        console.log('加密后数据:%o', encrypted)
+        //使用私钥解密
+        var decrypt = new JSEncrypt()
+        //decrypt.setPublicKey('-----BEGIN PUBLIC KEY-----' + PUBLIC_KEY + '-----END PUBLIC KEY-----');
+        decrypt.setPrivateKey(
+            '-----BEGIN RSA PRIVATE KEY-----' + PRIVATE_KEY + '-----END RSA PRIVATE KEY-----'
+        )
+        var uncrypted = decrypt.decrypt(encrypted)
+        console.log('解密后数据:%o', uncrypted)
+    </script>
+</html>

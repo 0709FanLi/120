@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>call_bind_apply</title>
+    </head>
+    <body></body>
+</html>
+<script>
+    /*
+        call 的实现
+        核心原理 利用this绑定原理 来实现call
+    */
+    // call的作用
+    let obj1 = {
+        name: 'obj1'
+    }
+    let obj2 = {
+        name: 'obj2',
+        func: function (age) {
+            console.log(arguments)
+        }
+    }
+    // obj2.func();    // obj2
+    // obj2.func.call(obj1);    // obj1
+
+    Object.prototype.myCall = function (thisArg) {
+        let args = [...arguments].slice(1)
+        if (typeof this != 'function') {
+            throw 'this 必须是一个函数'
+        }
+        let fn = Symbol(this)
+        thisArg[fn] = this
+        // this 调用call的函数 thisArg 需要更改的this的指向
+        // thisArg[fn](args)
+        thisArg[fn](...args)
+    }
+
+    obj2.func.myCall(obj1, 15, 18, 19, 20)
+    // obj2.func.call(obj1);
+    // obj2.func.apply(obj1,[13]);
+</script>

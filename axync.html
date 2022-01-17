@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>异步</title>
+    </head>
+    <body></body>
+</html>
+<script>
+    // function* gen() {
+    //     yield 1;
+    //     yield 2;
+    //     console.log(result);
+    //     yield 3;
+    // };
+    // let g = gen();
+    // console.log('g', g);
+    // console.log(g.next()); // {value: 1, done: false}
+    // console.log(g.next()); // {value: 2, done: false}
+    // console.log(g.next()); // {value: 3, done: false}
+    // console.log(g.next()); // {value: undefined, done: true}
+
+    // function *foo(x) {
+    //     let y = 2 * (yield (x + 1))
+    //     let z = yield (y / 3)
+    //     return (x + y + z)
+    // }
+    // let it = foo(5)
+    // console.log(it.next())   // => {value: 6, done: false}
+    // console.log(it.next(12)) // => {value: 8, done: false}
+    // console.log(it.next(13)) // => {value: 42, done: true}
+
+    // function isType(type) {
+    //     return (val)=>{
+    //         return Object.prototype.toString.call(val) === `[object ${type}]`
+    //     }
+    // }
+    // let isString = isType('String');
+    // let isNumber = isType('Number');
+    // console.log(isString('abc'));
+    // console.log(isNumber(123));
+
+    // function readTunnk(fileName) {
+    //     return (callback)=>{
+    //         fs.readFile(fileName, callback)
+    //     }
+    // }
+
+    // const gen =  function* (params) {
+    //     let file1 = yield readTunnk('001.txt');
+    //     console.log(file1.toString());
+    //     let file2 = yield readTunnk('002.txt');
+    //     console.log(file2.toString());
+    // }
+
+    // let g = gen();
+    /*
+        第一步调用next,开始执行,next返回的value是一个定制化的函数，
+        需要一个函数作为参数，座位读取文件后的回调函数
+        第二步，传递data1作为参数传入，程序继续执行
+        第三步，同理data2作为参数传入
+    */
+    // g.next().value((err, data1)=>{
+    //     g.next(data1).value((err,data2)=>{
+    //         g.next(data2);
+    //     })
+    // })
+
+    /*
+        如果res.done == false 
+        就需要再次调用next 
+        直到 res.done == true，
+        这不就是迭代吗
+    */
+    // const runGen = function (gen) {
+    //     const next = function (err,data) {
+    //         const res = gen.next(data);
+    //         if(res.done) return;
+    //         res.value(next);
+    //     }
+    // }
+
+    // const promiseGen = function (str) {
+    //     return new Promise((resolve,reject)=>{
+    //         setTimeout(() => {
+    //             resolve(str);
+    //         }, 1000);
+    //     })
+    // }
+
+    // const gen = function* () {
+    //     let str1 = yield promiseGen('abc');
+    //     console.log(str1);
+    //     let str2 = yield promiseGen('def');
+    //     console.log(str2);
+    // };
+
+    // let g = gen();
+    // g.next().value
+    // .then(str1=>{
+    //     return g.next(str1).value
+    // })
+    // .then(str2=>{
+    //     return g.next(str2)
+    // })
+
+    // const gen =  function* (params) {
+    //     const file1 = yield new Promise(function (resolve, reject) {
+    //         setTimeout(() => {
+    //             resolve('abc')
+    //         }, 1000);
+    //     })
+    //     console.log(file1);
+    //     const file2 = yield new Promise(function (resolve, reject) {
+    //         setTimeout(() => {
+    //             resolve('def')
+    //         }, 1000);
+    //     })
+    //     console.log(file2);
+    // }
+
+    // let g = gen();
+    // g.next().value.then(data1 => {
+    //     g.next(data1).value.then(data2=>{
+    //         g.next(data2);
+    //     })
+    // })
+
+    /*
+        如果 res.done
+    */
+    // const runGen = function (g) {
+    //     const next = function(data){
+    //         const res = g.next(data);
+    //         if(res.done) return;
+    //         res.value.then((data2)=>{
+    //             next(data2)
+    //         })
+    //     }
+    //     next();
+    // };
+    // runGen(g);
+
+    // const co = require('co');
+    // let g = gen();
+    // co(g).then(res =>{
+    //     console.log(res);
+    // })
+
+    const promiseGen = function (str) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(str)
+            }, 1000)
+        })
+    }
+
+    async function logFunc(params) {
+        const str1 = await promiseGen('abc')
+        console.log(str1)
+        const str2 = await promiseGen('def')
+        console.log(str2)
+    }
+
+    logFunc()
+</script>

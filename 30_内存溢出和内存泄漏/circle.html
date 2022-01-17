@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>circle</title>
+    </head>
+    <style>
+        .center {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            margin-top: 200px;
+            border: 2px solid red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .circle {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            border-radius: 50%;
+            width: 297px;
+            height: 297px;
+            margin: 0 auto;
+            border: 2px solid blue;
+        }
+        .radiusBox {
+            width: 5px;
+            height: 150px;
+            background-color: #6a5acd8c;
+            border-radius: 5px;
+        }
+        .radius {
+            transform: rotate(0deg);
+            width: 100%;
+            height: 100%;
+            background-color: #6a5acdeb;
+            border-radius: 5px;
+            transform-origin: 50% 100%;
+        }
+    </style>
+    <body class="eBody">
+        <div class="center">
+            <div class="circle">
+                <div class="radiusBox">
+                    <div class="radius"></div>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    </body>
+</html>
+
+<script>
+    let ele = document.getElementsByClassName('center')
+    let eBody = document.getElementsByClassName('eBody')
+    let radius = document.getElementsByClassName('radius')
+    const offX = ele[0].offsetLeft + 150
+    const offY = ele[0].offsetTop + 150
+    console.log('ele[0]', ele[0].offsetLeft + 150)
+    console.log('ele[0]', ele[0].offsetTop + 150)
+    // ele.addEventListener('')
+
+    ele[0].addEventListener('mousedown', function (event) {
+        console.log('mousedown', event)
+        // ele[0].addEventListener('mousemove',logFunc)
+        ele[0].addEventListener('mouseup', logFunc)
+    })
+
+    //  鼠标移出 取消监听
+    eBody[0].addEventListener('mouseenter', function (event) {
+        console.log('onmouseout', '离开了离开了')
+        ele[0].removeEventListener('mouseup', logFunc)
+    })
+
+    function logFunc(event) {
+        console.log('onmousemove', event)
+        let pageX = event.pageX
+        let pageY = event.pageY
+        const widthR = Math.abs(pageX - offX)
+        const heightR = Math.abs(pageY - offY)
+        let rotate = (360 * Math.atan(widthR / heightR)) / (2 * Math.PI)
+        console.log((360 * Math.atan(widthR / heightR)) / (2 * Math.PI)) //  角度值
+        radius[0].style.transform = 'rotate(' + rotate + 'deg)'
+    }
+</script>
