@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue3绑定原理</title>
+</head>
+<body>
+    <div id="app"></div>
+    
+</body>
+</html>
+<script>
+    //  代理 增删改的时候 执行更新
+    let obj = {
+        name:'liguangyuan',
+        age:'22',
+        like:['apple','banana']
+    }
+
+    let animal = {
+        type:'dog',
+        age:'1',
+    }
+    
+    
+    let wMap = new WeakMap();
+    let activeEffect = null
+
+    function trick(key,receiver) {
+        if(!activeEffect) return;
+        //  还有dep
+        if(!wMap.get(receiver)){
+            let maps = new Map();
+            wMap.set(receiver,maps)
+            let dep = new Set()
+            dep.add(activeEffect)
+            maps.set(key, dep)
+        } else {
+            let maps = wMap.get(receiver);
+            if(!maps.get(key)){
+                let dep = new Set()
+                dep.add(activeEffect)
+                maps.set(key, dep)
+            } else {
+                let dep = maps.get(key)
+                dep.add(activeEffect)
+            }
+        }
+    }
+
+    function tricker(key,receiver) {
+        let maps = wMap.get(receiver);
+        let dep = maps.get(key);
+        dep.forEach(fn => fn());
+    }
+
+    function reactive(obj){
+        const handler = {
+            get(target,key,receiver){
+                trick(key, receiver)
+                return Reflect.get(target,key,receiver)
+            },
+            set(target,key,value,receiver){
+                Reflect.set(target,key,value,receiver)
+                tricker(key, receiver)
+                console.log(66666666666);
+            }
+        }
+        return new Proxy(obj,handler)
+    }
+
+    const proxyObj = reactive(obj);
+    const proxyAnimal = reactive(animal);
+
+    name1Func = ()=>{
+        console.log(`我是name111,名字是${proxyObj.name}`);
+    }
+    name2Func = ()=>{
+        console.log(`我是name222,名字是${proxyObj.name}`);
+    }
+
+    age1Func = ()=>{
+        document.write(`<h3>我是age,我今年${proxyObj.age}岁了</h3>`)
+    }
+
+    typeFunc = ()=>{
+        console.log(`我是一只${proxyAnimal.type}`)
+    }
+
+    function effect(fn){
+        activeEffect = fn;
+        activeEffect();
+        activeEffect = null;
+    }
+
+    effect(name1Func)
+    effect(age1Func)
+    effect(typeFunc)
+
+    setTimeout(() => {
+        proxyObj.name = 'diandian'
+        proxyObj.age = '20'
+        proxyAnimal.type = '小猫咪'
+    }, 1500);
+
+
+
+</script>

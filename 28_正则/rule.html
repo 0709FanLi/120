@@ -21,7 +21,7 @@
             let p1 = /[^A-Z0-9]{1,17}/g
             let s1 = 'ajdlk klfjlad 0980asd7f79703jl@!#?4m90980-@#4lj()(jKKadfweK-jk'
             let r1 = s1.replace(p1, '') //  09807797034909804KKK
-            /*
+    /*
         ^ 取反
         i 忽略大小写
         g 全局
@@ -31,6 +31,11 @@
             let p3 = /https/
             let s3 = 'https90909090909'
             console.log(s3.replace(p3, 'http'))
+    // $  匹配字符串结束
+        let base = "/documents/%E2%82%AC#"
+        console.log(base.replace(/#$/,'11111111111111'));  //  /documents/%E2%82%AC11111111111111
+
+
         </script>
     </body>
 </html>
