@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue3绑定原理</title>
+</head>
+<body>
+    <div id="app"></div>
+    <div id="sum"></div>
+</body>
+</html>
+<script>
+    let obj = {name:'402'}
+
+    //  dep depend的缩写，Set可以自动去重
+    let dep = new Set()
+    let proxyObj = new Proxy(obj,{
+        get(target, key, receiver){
+            //  收集依赖
+            dep.add(mySelf)
+            dep.add(other)
+            return Reflect.get(target,key,receiver)
+        },
+        set(target,key,value,receiver){
+            Reflect.set(target,key,value,receiver)
+            //  通知更新
+            dep.forEach(fn=>fn())
+        }
+    })
+
+    function mySelf(){
+        console.log(`我的名字是，${proxyObj.name}`)
+    }
+    function other(){
+        console.log(`我有一个朋友，他的名字是，${proxyObj.name}`)
+    }
+
+    mySelf()    // 我的名字是，402
+    other()     // 我有一个朋友，他的名字是，402
+    
+    proxyObj.name = '小明';
+
+</script>

@@ -11,17 +11,6 @@
 </body>
 </html>
 <script>
-    //  代理 增删改的时候 执行更新
-    let obj = {
-        name:'liguangyuan',
-        age:'22',
-        like:['apple','banana']
-    }
-
-    let animal = {
-        type:'dog',
-        age:'1',
-    }
     
     let wMap = new WeakMap();
     let activeEffect = null
@@ -65,24 +54,6 @@
         return new Proxy(obj,handler)
     }
 
-    const proxyObj = reactive(obj);
-    const proxyAnimal = reactive(animal);
-
-    name1Func = ()=>{
-        console.log(`我是name111,名字是${proxyObj.name}`);
-    }
-    name2Func = ()=>{
-        console.log(`我是name222,名字是${proxyObj.name}`);
-    }
-
-    age1Func = ()=>{
-        document.write(`<h3>我是age,我今年${proxyObj.age}岁了</h3>`)
-    }
-
-    typeFunc = ()=>{
-        console.log(`我是一只${proxyAnimal.type}`)
-    }
-
     //  最重要的其实就是 effect 函数
     function effect(fn){
         activeEffect = fn;
@@ -100,29 +71,12 @@
         effect(()=> result.value = fn())
         return result;
     }
-    let sum = ref();
 
     let sum1 = ref(11)
-    let sum2 = ref(12)
 
     let addAllSum = computed(()=>{
         return `他居然有${sum1.value}元`
     })
-    function hasSum(params) {
-        alert(`哇！他居然有${sum.value}元！太不可思议了`)
-    }
-
-    effect(name1Func)
-    effect(age1Func)
-    effect(typeFunc)
-    effect(hasSum)
-
-    setTimeout(() => {
-        proxyObj.name = 'diandian'
-        proxyObj.age = '20'
-        proxyAnimal.type = '小猫咪'
-        sum.value = 100
-        sum1.value = 555
-    }, 1500);
+    console.log(addAllSum.value)
 
 </script>

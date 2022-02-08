@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ctx</title>
+</head>
+<body>
+    <div style="float: left;width: 500px;">
+        <h5>moveTo(x,y): 将笔触移动到指定的坐标x以及y上</h5>
+        <h5>lineTo(x,y): 
+            使用直线连接子路径的终点到x,y坐标的方法，
+            并不会真正的绘制
+        </h5>
+        <h5>save(): 将当前状态放到栈中，保存canvas全部状态的方法</h5>
+        <h5>restore(): 在绘图状态栈中弹出顶端的状态，将canvas恢复到最近的保存状态的方法</h5>
+        <h5>rotate(angle): angle：弧度，</h5>
+    </div>
+    <canvas id="ctx" width="800" height="400"></canvas>
+</body>
+</html>
+<script>
+    
+    const canvas = document.getElementById('ctx')
+    let ctx;
+    if(canvas.getContext){
+        ctx = canvas.getContext('2d')
+    } else {
+        console.log('不支持Canvas');
+    }   
+    
+    ////////////////
+    ctx.save()
+    function draw() {
+        ctx.restore()
+        ctx.save()
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        ctx.translate(200, 200)
+        ctx.beginPath()
+        ctx.arc(0, 0, 100, 0, 2 * Math.PI)
+        ctx.stroke()
+        ctx.closePath();
+
+        ctx.beginPath()
+        ctx.arc(0, 0, 2, 0, 2 * Math.PI)
+        ctx.stroke()
+        ctx.closePath();
+
+        const toAngle = Math.PI / 180;
+        //  保存初始状态
+        
+        let seconds = new Date().getSeconds()
+        let angle = seconds*(360/60)
+        console.log(angle);
+        ctx.rotate((Math.PI / 180)*angle - 90)
+        ctx.beginPath();
+        ctx.moveTo(-10,0)
+        ctx.lineTo(100,0)
+        ctx.stroke()
+        ctx.closePath();
+        window.requestAnimationFrame(draw);
+    }
+
+    window.requestAnimationFrame(draw);
+
+
+</script>
