@@ -28,37 +28,93 @@
     } else {
         console.log('不支持Canvas');
     }   
-    
-    ////////////////
-    ctx.save()
-    function draw() {
-        ctx.restore()
-        ctx.save()
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    function drawCircle(){
+        //  大圆
         ctx.translate(200, 200)
         ctx.beginPath()
         ctx.arc(0, 0, 100, 0, 2 * Math.PI)
         ctx.stroke()
         ctx.closePath();
 
+        //  大圆
         ctx.beginPath()
         ctx.arc(0, 0, 2, 0, 2 * Math.PI)
         ctx.stroke()
         ctx.closePath();
+    }
+    
+    ////////////////
+    ctx.save()
+    function draw() {
+        ctx.restore()
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.save()
+        drawCircle()
+        ctx.save()
 
-        const toAngle = Math.PI / 180;
-        //  保存初始状态
-        
+        //  秒针
         let seconds = new Date().getSeconds()
         let angle = seconds*(360/60)
-        console.log(angle);
-        ctx.rotate((Math.PI / 180)*angle - 90)
+        ctx.rotate((Math.PI / 180)*(angle - 90))
         ctx.beginPath();
         ctx.moveTo(-10,0)
         ctx.lineTo(100,0)
         ctx.stroke()
         ctx.closePath();
+
+        ctx.restore()
+        ctx.save()
+        //  分针 
+        let minutes = new Date().getMinutes()
+        let minutesAngle = minutes*(360/60)
+        ctx.rotate((Math.PI / 180)*(minutesAngle - 90))
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(-10,0)
+        ctx.lineTo(70,0)
+        ctx.stroke()
+        ctx.closePath();
+        ctx.restore()
+        ctx.save()
+
+        // 时针
+        let hours = new Date().getHours()
+        let hoursAngle = hours*(360/12)
+        ctx.rotate((Math.PI / 180)*(hoursAngle - 90))
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.moveTo(-10,0)
+        ctx.lineTo(50,0)
+        ctx.stroke()
+        ctx.closePath();
+        ctx.restore()
+        ctx.save()
+
+        //  分针刻度
+        for(let i = 0;i < 60;i++){
+            // 周长 2*Math.PI.100 / 60
+            ctx.rotate(2 * Math.PI / 60)
+            ctx.beginPath();
+            ctx.moveTo(95,0)
+            ctx.lineTo(100,0)
+            ctx.stroke()
+            ctx.closePath();
+        }
+        ctx.restore()
+        ctx.save()
+
+        //  时针刻度
+        for(let i = 0;i < 12;i++){
+            ctx.rotate(2 * Math.PI / 12)
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.moveTo(90,0)
+            ctx.lineTo(100,0)
+            ctx.stroke()
+            ctx.closePath();
+        }
+        ctx.restore()
         window.requestAnimationFrame(draw);
     }
 

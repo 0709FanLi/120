@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ctx</title>
+<style>
+    .textBox{
+        width: 500px;
+        height: 200px;
+        text-align: center;
+        line-height: 200px;
+        position: absolute;
+        left: 0;
+        top:0;
+        z-index: -1;
+        font-size: 25px;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+    <div style="float: left;width: 500px;">
+        <h5>
+            <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/fillStyle">
+                fillStyle: ctx.fillStyle = color/gradient/pattern
+            </a>
+        </h5>
+        <h5>fillRect(x, y, width, height)：矩形开始点(x,y),width,height表示矩形宽高</h5>
+        <h5>fillText(text,x, y,maxWidth)：在(x,y)填充文本，maxWidth可选</h5>
+        <h5>font：和css fontSize一致</h5>
+        <h5>fill：根据当前的填充样式，填充当前或已存在的路径的方法。</h5>
+        <h5>
+            <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/fillStyle">
+                globalCompositeOperation: 绘制形状时应用的合成操作的类型
+            </a>
+        </h5>
+    </div>
+    <div style="display: inline-block;position: relative;">
+        <canvas id="ctx" width="500" height="200"></canvas>
+        <div class="textBox">你中了100W</div>
+    </div>
+</body>
+</html>
+<script>
+    
+    const canvas = document.getElementById('ctx')
+    let ctx;
+    if(canvas.getContext){
+        ctx = canvas.getContext('2d')
+    } else {
+        console.log('不支持Canvas');
+    }   
+    ctx.fillStyle = 'darkgray';
+    ctx.fillRect(0,0,500,200)
+    ctx.fillStyle = '#fff';
+    ctx.font = "48px serif";
+    ctx.fillText('刮刮卡',180,110)
+
+    let isDraw;
+
+    canvas.onmousemove = function (e) {
+        if(!isDraw) return;
+        let x = e.pageX - 500, y = e.pageY - 10;
+        ctx.globalCompositeOperation = 'destination-out'
+        ctx.arc(x, y,10,0,2 * Math.PI)
+        ctx.fill()
+        ctx.closePath()
+    }
+
+    canvas.onmousedown = function () {
+        isDraw = true
+    }
+
+    canvas.onmouseup = function () {
+        isDraw = false
+    }
+    
+
+</script>
